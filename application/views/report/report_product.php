@@ -1,4 +1,8 @@
 <!-- CSS -->
+<?php
+  // echo "<pre>";
+  // print_r($product);
+ ?>
 <link rel="stylesheet" href="<?php echo base_url()?>js\DataTables\media\css\dataTables.bootstrap.min.css">
 <link rel="stylesheet" href="<?php echo base_url()?>js\DataTables\extensions\Buttons\css\buttons.bootstrap.min.css">
 
@@ -66,40 +70,25 @@
       <tbody>
         <?php $confirm = array( 'onclick' => "return confirm('ต้องการลบข้อมูลหรือไม่?')");?>
         <?php $i = 1;
-        // echo "<pre>";
-        // print_r($product);
-        // $this->debuger->prevalue($product);
         ?>
-        <?php foreach($product as $row){ ?>
+        <?php foreach($product['sale_order_item'] as $row) { ?>
           <tr>
             <td><div align="center"><?php echo $i ?></div></td>
             <td><?php echo @$row['product_code']?></td>
             <td><?php echo @$row['product_name']?></td>
-            <td class="text-right">
-
-              <?php
-              $this->db->where('stock_product', @$row['product_code']);
-              $this->db->where('stock_type',"out");
-              $this->db->where('stock_date >=',@$date_start);
-              $this->db->where('stock_date <=',@$date_end);
-              $query = $this->db->get('stock');
-              @$stock_amount = @$query->result_array();
-              echo number_format(@$row['sum_stock']['stock_amount']);
-              @$total[] = @$row['sum_stock']['stock_price'];
-              @$amount[] = $row['sum_stock']['stock_amount']; ?>
-
-            </td>
+            <td class="text-right"><?php echo @$row['sum_stock_amount']; ?></td>
             <td><?php echo @$row['product_unit'] ?></td>
             <td class="text-right"><?php echo number_format(@$row['product_buy']) ?>  </td>
             <td class="text-right"><?php echo number_format(@$row['product_sale']) ?></td>
-            <td class="text-right"><?php  @$total_buy = (@$row['sum_stock']['stock_amount']*@$row['product_buy']); echo number_format(@$total_buy) ?>  </td>
-            <td class="text-right"><?php @$total_sale = @$row['sum_stock']['stock_amount']*@$row['product_sale']; echo number_format(@$total_sale)  ?></td>
-            <td class="text-right"><?php echo number_format(@$total_sale-@$total_buy) ?></td>
+
+            <td class="text-right"><?php  echo number_format(@$row['product_buy'] * @$row['sum_stock_amount']) ?>  </td>
+            <td class="text-right"><?php echo number_format(@$row['sum_stock_price'])  ?></td>
+            <td class="text-right"><?php echo number_format(@$row['sum_stock_price'] - (@$row['product_buy'] * @$row['sum_stock_amount'])) ?></td>
             <?php @$total_order_sale = @$row['sum_stock']['stock_price'];  ?>
             <?php @$discount_sale_product = @$total_sale-$total_order_sale;  ?>
 
-            <td class="text-right"><?php echo number_format(@$discount_sale_product)?> </td>
-            <td class="text-right"><?php echo number_format((@$total_sale-@$total_buy)-$discount_sale_product)?> </td>
+            <td class="text-right"><?php echo number_format(@$row['sum_stock_discount'])?> </td>
+            <td class="text-right"><?php echo number_format(@$row['sum_stock_price'] - (@$row['product_buy'] * @$row['sum_stock_amount']) - @$row['sum_stock_discount']) ?> </td>
           </tr>
           <?php
           @$product_buy[] = @$row['product_buy'];
@@ -111,25 +100,26 @@
           <?php $i++ ?>
           <?php } ?>
         </tbody>
+
         <tfoot>
           <tr>
 
             <th colspan="4" style="background:#dcdcdc"></th>
             <th class="text-center"><span class="text-success"><strong>ยอดรวม</strong></span></th>
-            <th class="text-right"><?php echo  number_format(@array_sum(@$product_buy)) ?></th>
-            <th class="text-right"><?php echo  number_format(@array_sum(@$product_sale)) ?></th>
-            <th class="text-right"><?php echo  number_format(@array_sum(@$all_total_buy)) ?></th>
-            <th class="text-right"><?php echo  number_format(@array_sum(@$all_total_sale)) ?></th>
-            <th class="text-right"><?php echo  number_format(@array_sum(@$all_total_sale) - @array_sum(@$all_total_buy) ) ?></th>
-            <th class="text-right"><?php echo  number_format(@array_sum(@$all_total_sale) - @array_sum(@$all_total_order_sale) ) ?></th>
-            <th class="text-right"><?php echo  number_format(@array_sum(@$all_total_order_sale) - @array_sum(@$all_total_buy) ) ?></th>
+            <th class="text-right"><?php echo  number_format($product['sale_summary']['sum_buy']) ?></th>
+            <th class="text-right"><?php echo  number_format($product['sale_summary']['sum_sale']) ?></th>
+            <th class="text-right"><?php echo  number_format($product['sale_summary']['sum_cost']) ?></th>
+            <th class="text-right"><?php echo  number_format($product['sale_summary']['sum_price']) ?></th>
+            <th class="text-right"><?php echo  number_format($product['sale_summary']['sum_price']-$product['sale_summary']['sum_cost']) ?></th>
+            <th class="text-right"><?php echo  number_format($product['sale_summary']['sum_discount']) ?></th>
+            <th class="text-right"><?php echo  number_format($product['sale_summary']['sum_price']-$product['sale_summary']['sum_cost']-$product['sale_summary']['sum_discount']) ?></th>
 
           </tr>
         <tr>
           <th colspan="9" style="background:#dcdcdc"></th>
           <th class="text-center"><span class="text-success"><strong>หักส่วนลดบิล</strong></span></th>
           <th class="text-right"><?php echo  number_format(@$discount_sale) ?></th>
-          <th class="text-right"><?php echo  number_format(@array_sum(@$all_total_order_sale) - @array_sum(@$all_total_buy)-$discount_sale ) ?></th>
+          <th class="text-right"><?php echo  number_format($product['sale_summary']['sum_price']-$product['sale_summary']['sum_cost']-$product['sale_summary']['sum_discount'] - $discount_sale ) ?></th>
         </tr>
         </tfoot>
       </table>

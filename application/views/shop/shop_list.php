@@ -8,7 +8,7 @@
     </div>
   </div>
   <!-- /.row -->
-  <div align="right"><p><?php echo anchor('shop/shop_insert','<button type="button" class="btn btn-primary" style="width:200px;">เพิ่มร้านขายน้ำ</button>')?></p></div>
+  <div align="right"><p><?php echo anchor('shop/shop_insert','<button type="button" class="btn btn-primary" style="width:200px;">เพิ่มร้าน</button>')?></p></div>
   <table class="table table-bordered table-hover table-striped tablesorter">
     <thead>
       <tr>
