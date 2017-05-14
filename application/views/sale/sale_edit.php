@@ -184,22 +184,22 @@ function getfocus(){
                       <td class="text-right">
                         <?php echo form_open('sale_manage/sale_edit_amount/'.$i)?>
                         <input onchange="this.form.submit()"
-                        Max="<?php echo @$_SESSION['product'][$i]['product_normal_sale']?>"
-                        style="width: 100%; background-color: #f5bca2;"
-                        class="form-control text-right"
-                        type="number" step="any"
-                        name="sale_amount"
-                        value="<?php echo @$_SESSION['product'][$i]['product_sale']?>">
+                          Max="<?php echo @$_SESSION['product'][$i]['product_normal_sale']?>"
+                          style="width: 100%; background-color: #f5bca2;"
+                          class="form-control text-right"
+                          type="number" step="any"
+                          name="sale_amount"
+                          value="<?php echo @$_SESSION['product'][$i]['product_sale']?>">
                       </td>
                       <td>
                         <div class="text-center">
                           <input
-                          onchange="this.form.submit()"
-                          style="width: 100%; background-color: #f5bca2;"
-                          class="form-control text-right"
-                          type="number"
-                          name="sale_quantity"
-                          value="<?php echo @$_SESSION['product'][$i]['sale_quantity'] ?>">
+                            onchange="this.form.submit()"
+                            style="width: 100%; background-color: #f5bca2;"
+                            class="form-control text-right"
+                            type="number"
+                            name="sale_quantity"
+                            value="<?php echo @$_SESSION['product'][$i]['sale_quantity'] ?>">
                           <?php echo form_close()?>
                       </div>
                     </td>
