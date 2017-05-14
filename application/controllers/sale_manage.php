@@ -7,7 +7,7 @@ class sale_manage extends CI_Controller {
 		@session_start();
 		date_default_timezone_set("Asia/Bangkok");
 		$barcode = array('barcode' => $this->input->post('barcode'));
-		$product_limit_check = $this->stock_model->check_product(@$_SESSION['employees_shop'],$barcode['barcode']);
+		$product_limit_check = $this->stock_model->check_product(@$_SESSION['employees_shop'], $barcode['barcode']);
 
 		if (count($product_limit_check)>0) {
 			$data = $this->sale_model->product_select($barcode);
@@ -19,6 +19,7 @@ class sale_manage extends CI_Controller {
 			@$_SESSION['product'][$num]['product_buy'] = $data[0]['product_buy'];
 			@$_SESSION['product'][$num]['product_sale'] = $data[0]['product_sale'];
 			@$_SESSION['product'][$num]['product_normal_sale'] = $data[0]['product_sale'];
+			@$_SESSION['product'][$num]['sale_quantity'] = 1;
 			@$_SESSION['pay_type'] = $_POST['sale_order_detail_pay_type'];
 
 			@$_SESSION['check'] = 0;
@@ -42,6 +43,7 @@ class sale_manage extends CI_Controller {
 		@$_SESSION['product'][$num]['product_buy'] = $data[0]['product_buy'];
 		@$_SESSION['product'][$num]['product_sale'] = $data[0]['product_sale'];
 		@$_SESSION['product'][$num]['product_normal_sale'] = $data[0]['product_sale'];
+		@$_SESSION['product'][$num]['sale_quantity'] = 1;
 		@$_SESSION['pay_type'] = $_POST['sale_order_detail_pay_type'];
 
 		redirect($this->agent->referrer(), 'refresh');
@@ -79,7 +81,7 @@ class sale_manage extends CI_Controller {
 		if(@$_SESSION['employees_id']!=""){
 			$product_key = $this->uri->segment(3);
 			for($i=0;$i<30;$i++){
-				if(@$_SESSION['product'][$i]['product_key']==$product_key){
+				if(@$_SESSION['product'][$i]['product_key'] == $product_key){
 					unset($_SESSION['product'][$i]);
 					@$_SESSION['unstock'][$i] = $_SESSION['stock'][$i];
 					unset($_SESSION['stock'][$i]);
@@ -184,6 +186,7 @@ class sale_manage extends CI_Controller {
 				'stock_employees' => @$_SESSION['employees_id'],
 				'stock_shop' => @$_SESSION['employees_shop'],
 				'stock_price' => @$_SESSION['product'][$i]['product_sale'],
+				'stock_amount' => @$_SESSION['product'][$i]['sale_quantity'],
 				'sale_order_detail_id' => $sale_order_id,
 			);
 			$this->db->insert('stock',$stock);
@@ -284,9 +287,18 @@ class sale_manage extends CI_Controller {
 		@session_start();
 		$i = $this->uri->segment(3);
 		@$_SESSION['product'][$i]['product_sale'] = $_POST['sale_amount'];
+		@$_SESSION['product'][$i]['sale_quantity'] = $_POST['sale_quantity'];
 		redirect('sale/sale_list');
 	}
+	public function sale_edit_amount()
+	{
+		@session_start();
+		$i = $this->uri->segment(3);
+		@$_SESSION['product'][$i]['product_sale'] = $_POST['sale_amount'];
+		@$_SESSION['product'][$i]['sale_quantity'] = $_POST['sale_quantity'];
+		redirect($this->agent->referrer(), 'refresh');
 
+	}
 	public function sale_pay_type()
 	{
 		@session_start();

@@ -9,8 +9,8 @@ class sale extends CI_Controller {
 		$data['config'] = $this->config_model->config();
 		if(@$_SESSION['employees_id']!=""){
 			$data['page'] = "sale/sale_list";
-			$this->load->view('head',$data);
-		}else{
+			$this->load->view('head', $data);
+		} else {
 			redirect('login/index');
 		}
 	}
@@ -23,7 +23,7 @@ class sale extends CI_Controller {
 			$data['page'] = "sale/sale_edit";
 			$data['order_detail'] = $this->stock_model->order_detail($order_id);
 			$data['order_item'] = $this->stock_model->order_item($order_id);
-			$this->load->view('head',$data);
+			$this->load->view('head', $data);
 		}else{
 			redirect('login/index');
 		}
