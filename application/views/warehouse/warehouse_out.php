@@ -29,7 +29,8 @@ function getfocus(){
     </tr>
     <tr>
       <td width="15%" height="50">ไปยัง</td>
-      <td width="35%"><select name="warehouse_shop" id="warehouse_shop" class="form-control" style="width:80%;" required="required">
+      <td width="35%">
+				<select name="warehouse_shop" id="warehouse_shop" class="form-control" style="width:80%;" required="required">
         <option value="">-- เลือกร้านค้า --</option>
         <?php foreach($shop as $shop){ ?>
         <option value="<?php echo $shop['shop_id']?>"><?php echo $shop['shop_details']?></option>

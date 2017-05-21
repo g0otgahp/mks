@@ -125,16 +125,16 @@ function getfocus(){
       <tr>
         <td width="70%"><table class="table" cellpadding="10" width="100%" border="1" cellspacing="0" cellpadding="0">
           <tr>
-            <td  colspan="7">&nbsp;&nbsp;&nbsp;<strong>รายการสินค้า ( Product List )</strong></td>
+            <td  colspan="5">&nbsp;&nbsp;&nbsp;<strong>รายการสินค้า ( Product List )</strong></td>
           </tr>
           <tr>
             <td width="5%" align="center">#</td>
             <td width="30%" align="center">รายการสินค้า</td>
-            <td width="10%" align="center">ราคาทุน</td>
-            <td width="15%" align="center">ราคาต่อหน่วย</td>
+            <!-- <td width="10%" align="center">ราคาทุน</td> -->
+            <!-- <td width="15%" align="center">ราคาต่อหน่วย</td> -->
             <td width="15%" align="center">ราคาสั่งขายต่อหน่วย</td>
             <td width="10%" align="center">จำนวน</td>
-            <td width="30%"  align="center">ราคารวม</td>
+            <td width="10%"  align="center">ราคารวม</td>
           </tr>
           <?php $index =1; for($i=0;$i<30;$i++){ ?>
             <?php $total[] = @$_SESSION['product'][$i]['product_sale']*@$_SESSION['product'][$i]['sale_quantity']?>
@@ -143,18 +143,18 @@ function getfocus(){
               <tr>
                 <td><div align="center"><?php echo $index; $index++; ?></div></td>
                 <td>&nbsp;<?php echo @$_SESSION['product'][$i]['product_code']?> <?php echo @$_SESSION['product'][$i]['product_name']?><input name="product_code[]" id="product_code[]" type="hidden" value="<?php echo @$_SESSION['product'][$i]['product_code']?>" /> <?php echo anchor('sale/sale_list_delete/'.@$_SESSION['product'][$i]['product_key'],'<i class="fa fa-trash-o"></i>')?></td>
-                <td>
+                <!-- <td>
                   <div align="center" >
                     <?php echo @$_SESSION['product'][$i]['product_buy']?>
                   </div>
-                </td>
-                <td>
+                </td> -->
+                <!-- <td>
                   <div align="right">
                     <?php echo form_open('sale_manage/sale_amount/'.$i)?>
                     <?php echo @$_SESSION['product'][$i]['product_normal_sale']?>
                     <?php echo form_close()?>
                   </div>
-                </td>
+                </td> -->
                 <td>
                   <div align="right">
                     <?php echo form_open('sale_manage/sale_amount/'.$i)?>
@@ -186,14 +186,14 @@ function getfocus(){
               <?php } ?>
               <?php  } ?>
               <tr>
-                <td colspan="6" align="right"><strong>รวมทั้งหมด (ก่อนหักส่วนลด)</strong></td>
+                <td colspan="4" align="right"><strong>รวมทั้งหมด (ก่อนหักส่วนลด)</strong></td>
                 <td ><div align="right">
                   <?php
                   echo @number_format(@array_sum(@$total));
                   ?>.00&nbsp;</div></td>
                 </tr>
                 <tr>
-                  <td colspan="6" align="right"><strong> <input onchange="window.location ='<?php echo site_url(); ?>/sale_manage/is_discount'" type="checkbox" name="is_vat" <?php echo @$_SESSION['is_discount']; ?>>ส่วนลด</strong></td>
+                  <td colspan="4" align="right"><strong> <input onchange="window.location ='<?php echo site_url(); ?>/sale_manage/is_discount'" type="checkbox" name="is_vat" <?php echo @$_SESSION['is_discount']; ?>>ส่วนลด</strong></td>
                   <td ><div align="right">
                     <?php echo form_open('/sale_manage/sale_discount'); ?>
                     <?php if (@$_SESSION['is_discount']!='checked'): ?>
@@ -205,7 +205,7 @@ function getfocus(){
                   </td>
                 </tr>
                 <tr>
-                  <td colspan="6" align="right"><strong>หลังหักส่วนลด</strong></td>
+                  <td colspan="4" align="right"><strong>หลังหักส่วนลด</strong></td>
                   <td ><div align="right">
                     <?php
                     if (@$_SESSION['is_discount']=='checked') {
@@ -216,7 +216,7 @@ function getfocus(){
                     ?>.00&nbsp;</div></td>
                   </tr>
                   <tr>
-                    <td colspan="6" align="right">
+                    <td colspan="4" align="right">
                       <strong><input onchange="window.location ='<?php echo site_url(); ?>/sale_manage/sale_vat'" type="checkbox" name="is_vat" <?php echo @$_SESSION['is_vat']; ?>> ภาษีมูลค่าเพิ่ม 7% </strong>
                     </td>
                     <td ><div align="right">
@@ -235,22 +235,29 @@ function getfocus(){
                     </div></td>
                   </tr>
                   <tr>
-                    <td bgcolor="" colspan="6" align="right"><strong>ยอดสุทธิ</strong></td>
+                    <td bgcolor="" colspan="4" align="right"><strong>ยอดสุทธิ</strong></td>
                     <td bgcolor="#88d660" ><div align="right"><strong>
                       <?php
+                      $temp_total = 0;
                       if (@$_SESSION['is_discount']=='checked') {
-                        echo @number_format(@array_sum(@$total)-(@$_SESSION['discount_value']*1));
+                        $temp_total = @array_sum(@$total)-(@$_SESSION['discount_value']*1);
                       } else {
-                        echo  @number_format(@array_sum(@$total));
+                        $temp_total =  @array_sum(@$total);
                       }
+
+                      if (@$_SESSION['is_vat']=='checked') {
+                        $temp_total = $temp_total + $temp_total*7/100;
+                      }
+
+                      echo @number_format($temp_total);
                       ?>.00&nbsp;</strong></div></td>
                     </tr>
-                    <tr>
-                      <td colspan="6" align="right"><strong>ต้นทุน</strong></td>
+                    <!-- <tr>
+                      <td colspan="4" align="right"><strong>ต้นทุน</strong></td>
                       <td ><div align="right"><?php echo @number_format(@array_sum(@$total_buy))?>.00&nbsp;</div></td>
-                    </tr>
-                    <tr>
-                      <td colspan="6" align="right"><strong>กำไร</strong></td>
+                    </tr> -->
+                    <!-- <tr>
+                      <td colspan="4" align="right"><strong>กำไร</strong></td>
                       <td ><div align="right">
                         <?php
                         if (@$_SESSION['is_discount']=='checked') {
@@ -260,17 +267,13 @@ function getfocus(){
                         }
                         ?>
                         .00&nbsp;</div></td>
-                      </tr>
+                      </tr> -->
                     </table>
                   </td>
                   <?php echo form_open('sale_manage/sale_insert')?>
                   <td valign="top"><div align="center">
                     <h2 style="color:green;">รวมเงิน   <?php
-                    if (@$_SESSION['is_discount']=='checked') {
-                      echo @number_format(@array_sum(@$total)-(@$_SESSION['discount_value']*1));
-                    } else {
-                      echo  @number_format(@array_sum(@$total));
-                    }
+                    echo @number_format($temp_total);
                     ?>.00 บาท&nbsp;</h2>
                     <input type="submit" value="ยืนยันการซื้อ" class="btn btn-success" style="width:90%; font-size:30px;">
                     <p></p>

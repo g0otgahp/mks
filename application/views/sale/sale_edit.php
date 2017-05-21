@@ -99,16 +99,16 @@ function getfocus(){
             <table class="table table-bordered">
               <thead>
                 <tr>
-                  <th colspan="7"><strong>รายการสินค้า ( Product List )</strong></th>
+                  <th colspan="5"><strong>รายการสินค้า ( Product List )</strong></th>
                 </tr>
                 <tr>
                   <th width="5%" class="text-center">#</th>
                   <th width="30%" class="text-center">รายการสินค้า</th>
-                  <th width="10%" class="text-center">ต้นทุน</th>
-                  <th width="15%" class="text-center">ราคาขาย</th>
-                  <th width="15%" class="text-center">ราคาสั่งขาย</th>
+                  <!-- <th width="10%" class="text-center">ต้นทุน</th>
+                  <th width="15%" class="text-center">ราคาขาย</th> -->
+                  <th width="15%" class="text-center">ราคาสั่งขายต่อหน่วย</th>
                   <th width="10%" class="text-center">จำนวน</th>
-                  <th width="30%"  class="text-center">ราคารวม</th>
+                  <th width="10%"  class="text-center">ราคารวม</th>
                 </tr>
               </thead>
               <tbody>
@@ -121,12 +121,12 @@ function getfocus(){
                       <?php echo @$row['product_code']?> <?php echo @$row['product_name'] ?>
                       <a href="<?php echo site_url('sale_manage/stock_item_delete/'.$row['stock_id']) ?>"><i class="fa fa-trash-o"></i></a>
                     </td>
-                    <td class="text-right">
+                    <!-- <td class="text-right">
                       <?php echo @$row['product_buy'] ?>
                     </td>
                     <td class="text-right">
                       <?php echo @$row['product_sale'] ?>
-                    </td>
+                    </td> -->
                     <td class="text-right">
                       <?php echo form_open('sale_manage/sale_stock_price_edit') ?>
                       <input type="hidden" name="stock_id" value="<?php echo @$row['stock_id'] ?>">
@@ -171,7 +171,7 @@ function getfocus(){
                       <td><?php echo @$_SESSION['product'][$i]['product_code']?> <?php echo @$_SESSION['product'][$i]['product_name']?><input name="product_code[]" id="product_code[]" type="hidden" value="<?php echo @$_SESSION['product'][$i]['product_code']?>" />
                         <a href="<?php echo site_url('sale_manage/sale_edit_delete/'.@$_SESSION['product'][$i]['product_key'])?>"><i class="fa fa-trash-o"></i></a>
                       </td>
-                      <td>
+                      <!-- <td>
                         <div class="text-right" >
                           <?php echo @$_SESSION['product'][$i]['product_buy']?>
                         </div>
@@ -180,7 +180,7 @@ function getfocus(){
                         <?php echo form_open('sale_manage/sale_edit_amount/'.$i)?>
                         <?php echo @$_SESSION['product'][$i]['product_normal_sale']?>
                         <?php echo form_close()?>
-                      </td>
+                      </td> -->
                       <td class="text-right">
                         <?php echo form_open('sale_manage/sale_edit_amount/'.$i)?>
                         <input onchange="this.form.submit()"
@@ -208,7 +208,7 @@ function getfocus(){
                     <?php } ?>
                     <?php  } ?>
                     <tr>
-                      <td colspan="6" class="text-right"><strong>ยอดรวม</strong></td>
+                      <td colspan="4" class="text-right"><strong>ยอดรวม</strong></td>
                       <td class="text-right">
                         <?php
                         $all_totol = @number_format(@array_sum(@$total_sale) + @array_sum(@$total_price) , 2, '.', '');
@@ -220,7 +220,7 @@ function getfocus(){
                     <tr>
 
 
-                      <td colspan="6" class="text-right">
+                      <td colspan="4" class="text-right">
                         <!-- <input type="checkbox" name="businessType" value="1"> -->
                         <strong>
                           <?php if (@$order_detail[0]['sale_order_detail_discount_status']==1) {
@@ -252,7 +252,7 @@ function getfocus(){
                     </tr>
 
                     <tr>
-                      <td colspan="6" class="text-right"><strong>ยอดรวมหลังหักส่วนลด</strong></td>
+                      <td colspan="4" class="text-right"><strong>ยอดรวมหลังหักส่วนลด</strong></td>
                       <td class="text-right">
                         <?php
                         if (@$discount_status=='checked') {
@@ -263,7 +263,7 @@ function getfocus(){
                         ?></div></td>
                       </tr>
                       <tr>
-                        <td colspan="6"  class="text-right">
+                        <td colspan="4"  class="text-right">
                           <strong><input onchange="this.form.submit()" type="checkbox" name="sale_order_detail_vat_status" value="<?php echo $order_detail[0]['sale_order_detail_vat_status'] ?>" <?php echo @$vat_status; ?>> ภาษี 7% </strong>
                         </td>
                         <td class="text-right">
@@ -284,25 +284,32 @@ function getfocus(){
                       <?php echo form_close(); ?>
 
                       <tr>
-                        <td bgcolor="" colspan="6" class="text-right"><strong>ยอดสุทธิ</strong></td>
+                        <td bgcolor="" colspan="4" class="text-right"><strong>ยอดสุทธิ</strong></td>
                         <td bgcolor="#88d660"  class="text-right">
                           <strong>
                             <?php
+                            $temp_total = 0;
                             if (@$discount_status=='checked') {
-                              echo @number_format(@$all_totol-(@$order_detail[0]['sale_order_detail_discount']*1), 2, '.', '');
+                              $temp_total =  $all_totol-(@$order_detail[0]['sale_order_detail_discount']*1);
                             } else {
-                              echo  @number_format(@$all_totol, 2, '.', '');
+                              $temp_total =  $all_totol;
                             }
+
+                            if (@$_SESSION['is_vat']=='checked') {
+                              $temp_total = $temp_total + $temp_total*7/100;
+                            }
+
+                            echo @number_format($temp_total, 2, '.', '');
                             ?>
                           </strong>
                         </td>
                       </tr>
-                      <tr>
-                        <td colspan="6" class="text-right"><strong>ต้นทุนรวม</strong></td>
+                      <!-- <tr>
+                        <td colspan="4" class="text-right"><strong>ต้นทุนรวม</strong></td>
                         <td class="text-right"><?php echo @number_format(array_sum(@$total_buy1) + array_sum(@$total_buy), 2, '.', '')?></div></td>
                       </tr>
                       <tr>
-                        <td colspan="6" class="text-right"><strong>กำไรสุทธิ</strong></td>
+                        <td colspan="4" class="text-right"><strong>กำไรสุทธิ</strong></td>
                         <td class="text-right">
                           <?php
                           if (@$discount_status=='checked') {
@@ -312,7 +319,7 @@ function getfocus(){
                           }
                           ?>
                         </td>
-                      </tr>
+                      </tr> -->
                     </tbody>
 
                   </table>
@@ -326,12 +333,7 @@ function getfocus(){
               <h2 style="color:green;">ยอดสุดทธิ </h2>
               <h2 class="text-success">
                 <?php
-                if (@$discount_status=='checked') {
-                  echo @number_format(@$all_totol-(@$order_detail[0]['sale_order_detail_discount']*1), 2, '.', '');
-                } else {
-                  echo  @number_format(@$all_totol, 2, '.', '');
-                }
-
+                  echo @number_format($temp_total, 2, '.', '');
                 ?> บาท</h2>
                 <button type="submit" class="btn btn-lg btn-success btn-block">ยืนยันการแก้ไข</button>
 

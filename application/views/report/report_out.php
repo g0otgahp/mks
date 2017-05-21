@@ -53,8 +53,9 @@
         <tr>
           <th>ลำดับ</th>
           <th>รายการสินค้า</th>
-          <th>วันท</th>
+          <th>วันที่</th>
           <th>เวลา</th>
+          <th>ปลายทาง</th>
           <th>จำนวน</th>
           <th>ราคาต่อหน่วย</th>
           <th>ราคารวม</th>
@@ -70,6 +71,7 @@
           <td><?php echo $changes['product_name']?></td>
           <td><?php echo $changes['warehouse_date']?></td>
           <td><?php echo $changes['warehouse_time']?></td>
+          <td><?php echo $changes['shop_details']?></td>
           <td><?php echo number_format($changes['warehouse_amount'])." ".$changes['product_unit']?></td>
           <td><?php echo number_format($changes['product_buy'])?> บาท</td>
           <td><?php echo number_format(($changes['product_buy']*$changes['warehouse_amount']))?> บาท</td>

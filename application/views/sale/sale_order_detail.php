@@ -93,11 +93,11 @@ function getfocus(){
               <tr>
                 <th width="9%" class="text-center">ลำดับ</th>
                 <th width="30%">รายการสินค้า</th>
-                <th width="10%" class="text-right">ราคาทุน</th>
-                <th width="15%" class="text-right">ราคาต่อหน่วย</th>
+                <!-- <th width="10%" class="text-right">ราคาทุน</th>
+                <th width="15%" class="text-right">ราคาต่อหน่วย</th> -->
                 <th width="15%" class="text-right">ราคาสั่งขายต่อหน่วย</th>
-                <th width="9%" class="text-right">จำนวน</th>
-                <th width="20%" class="text-right">ราคารวม</th>
+                <th width="10%" class="text-right">จำนวน</th>
+                <th width="10%" class="text-right">ราคารวม</th>
               </tr>
             </thead>
             <tbody>
@@ -111,12 +111,12 @@ function getfocus(){
                     <td>
                       <?php echo @$row['product_code']." - ".@$row['product_name']?>
                     </td>
-                    <td class="text-right">
+                    <!-- <td class="text-right">
                       <?php echo @$row['product_buy']?>.00
                     </td>
                     <td class="text-right">
                       <?php echo @$row['product_sale']?>.00
-                    </td>
+                    </td> -->
                     <td class="text-right">
                       <?php echo @$row['stock_price']?>.00
                     </td>
@@ -130,63 +130,70 @@ function getfocus(){
                   <?php } ?>
                   <?php $i++; endforeach; ?>
                   <tr>
-                    <td colspan="6" class="text-right"><strong>รวมทั้งหมด</strong></td>
+                    <td colspan="4" class="text-right"><strong>รวมทั้งหมด</strong></td>
                     <td class="text-right"><?php echo @number_format(@array_sum(@$total))?>.00</td>
                   </tr>
                   <tr>
                     <?php if ($sale_order_detail[0]['sale_order_detail_discount_status']==1): ?>
-                      <td colspan="6" class="text-right"><strong>ส่วนลด</strong></td>
+                      <td colspan="4" class="text-right"><strong>ส่วนลด</strong></td>
                       <td class="text-right">
                         <?php echo $sale_order_detail[0]['sale_order_detail_discount']; ?>.00
                       </td>
                     </tr>
                     <tr>
-                      <td colspan="6" class="text-right"><strong>หลังหักส่วนลด</strong></td>
+                      <td colspan="4" class="text-right"><strong>หลังหักส่วนลด</strong></td>
                       <td class="text-right">
-                        <?php  echo @number_format(@array_sum(@$total)-($sale_order_detail[0]['sale_order_detail_discount']*1));
+                        <?php
+                          $total_after_discount = 0;
+                          $total_after_discount = @array_sum( @$total ) - ( $sale_order_detail[0]['sale_order_detail_discount'] * 1 );
+                          echo @number_format($total_after_discount);
                         ?>.00</div></td>
                       </tr>
                     <?php endif; ?>
 
                     <?php if ($sale_order_detail[0]['sale_order_detail_vat_status']==1): ?>
                       <tr>
-                        <td colspan="6" class="text-right">
+                        <td colspan="4" class="text-right">
                           <strong> ภาษีมูลค่าเพิ่ม 7% </strong>
                         </td>
                         <td class="text-right">
                           <?php
-                          if ($sale_order_detail[0]['sale_order_detail_discount_status']==1) {
-                            @$discount_after_vat = (@array_sum(@$total)-(@$sale_order_detail[0]['sale_order_detail_discount']*1))*7/100;
-                            echo @number_format($discount_after_vat).".00";
-                          } else {
-                            echo @number_format(@array_sum(@$total)*7/100).".00";
-                          }
+                          $temp_vat = 0;
+                          $temp_vat = $total_after_discount*7/100;
+                          echo number_format($temp_vat);
                           ?>
                         </td>
                       </tr>
                     <?php endif; ?>
 
                     <tr>
-                      <td colspan="6" class="text-right"><strong>ยอดสุทธิ</strong></td>
+                      <td colspan="4" class="text-right"><strong>ยอดสุทธิ</strong></td>
                       <td bgcolor="#88d660" class="text-right">
                         <strong>
                           <?php
-                          if ($sale_order_detail[0]['sale_order_detail_discount_status']==1) {
-                            echo @number_format(@array_sum(@$total)-($sale_order_detail[0]['sale_order_detail_discount']));
+                          $temp_total = 0;
+                          if ($sale_order_detail[0]['sale_order_detail_discount_status'] == 1) {
+                            $temp_total = @array_sum(@$total)-($sale_order_detail[0]['sale_order_detail_discount']);
                           } else {
-                            echo  @number_format(@array_sum(@$total));
+                            $temp_total = @array_sum(@$total);
                           }
+
+                          if ($sale_order_detail[0]['sale_order_detail_vat_status']==1){
+                            $temp_total = $temp_total + $temp_vat;
+                          }
+
+                          echo  @number_format($temp_total);
                           ?>.00
                         </strong>
                       </td>
                     </tr>
-                    <tr>
-                      <td colspan="6" class="text-right"><strong>ต้นทุน</strong></td>
+                    <!-- <tr>
+                      <td colspan="4" class="text-right"><strong>ต้นทุน</strong></td>
 
                       <td  class="text-right"><?php echo @number_format(@array_sum(@$buy))?>.00</td>
                     </tr>
                     <tr>
-                      <td colspan="6" class="text-right"><strong>กำไร</strong></td>
+                      <td colspan="4" class="text-right"><strong>กำไร</strong></td>
 
                       <td  class="text-right">
                         <?php
@@ -197,7 +204,7 @@ function getfocus(){
                         }
                         ?>.00
                       </td>
-                    </tr>
+                    </tr> -->
                   </tbody>
                 </table>
               </div>

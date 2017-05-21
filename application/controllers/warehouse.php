@@ -70,6 +70,7 @@ class warehouse extends CI_Controller {
 					'warehouse_date' => date('Y-m-d'),
 					'warehouse_time' => date('H:i:s'),
 					'warehouse_employees' => $_SESSION['employees_id'],
+					'warehouse_shop_id' => $row['warehouse_temp_shop']
 				);
 				$this->warehouse_model->warehouse_in($input);
 

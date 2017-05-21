@@ -46,7 +46,7 @@
     <div class="collapse navbar-collapse navbar-ex1-collapse">
       <ul class="nav navbar-nav side-nav">
       <div align="center"><img src="<?php echo base_url()?>images/logo.png" width="80%"></div><br>
-		<li class="active"><?php echo anchor('home/index','<i class="fa fa-dashboard"></i> ภาพรวมของระบบ')?></li>
+		<li class=""><?php echo anchor('home/index','<i class="fa fa-dashboard"></i> ภาพรวมของระบบ')?></li>
         <?php if(@$_SESSION['position_status']==1){ ?>
           <li><?php echo anchor('warehouse/warehouse_list','<i class="fa fa-th"></i> สต๊อกสินค้ากลาง')?></li>
         <?php } ?>
