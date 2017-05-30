@@ -9,13 +9,17 @@
 
 <!-- Bootstrap core CSS -->
 <link href="<?php echo base_url()?>css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="<?php echo base_url()?>css\fontawesome321\css\font-awesome.min.css" rel="stylesheet">
+<link href="<?php echo base_url()?>css/fontawesome321/css/font-awesome.min.css" rel="stylesheet">
 
 <!-- Add custom CSS here -->
 <link href="<?php echo base_url()?>css/sb-admin.css" rel="stylesheet">
 <link rel="stylesheet" href="<?php echo base_url()?>font-awesome/css/font-awesome.min.css">
 <!-- Page Specific CSS -->
 <link rel="stylesheet" href="<?php echo base_url()?>css/morris-0.4.3.min.css">
+<link rel="stylesheet" href="<?php echo base_url()?>js/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="<?php echo base_url()?>js/selectize/css/selectize.bootstrap3.css">
+
+
 <!-- /#wrapper -->
 
 <!-- JavaScript -->
@@ -121,5 +125,39 @@
   </nav>
   <?php echo $this->load->view($page)?>
   </div>
+
+  <script src="<?php echo base_url()?>js/jquery-datatable/jquery.dataTables.js" charset="utf-8"></script>
+  <script src="<?php echo base_url()?>js/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.min.js" charset="utf-8"></script>
+  <script src="<?php echo base_url()?>js/selectize/js/standalone/selectize.min.js" charset="utf-8"></script>
+  <!-- <script src="<?php echo base_url()?>js/jquery-datatable/th.json" charset="utf-8"></script> -->
+  <script type="text/javascript">
+
+  $(document).ready(function(){
+
+
+$.extend(true, $.fn.dataTable.defaults, {
+   "language": {
+             "sProcessing": "กำลังดำเนินการ...",
+             "sLengthMenu": "แสดง_MENU_ แถว",
+             "sZeroRecords": "ไม่พบข้อมูล",
+             "sInfo": "แสดง _START_ ถึง _END_ จาก _TOTAL_ แถว",
+             "sInfoEmpty": "แสดง 0 ถึง 0 จาก 0 แถว",
+             "sInfoFiltered": "(กรองข้อมูล _MAX_ ทุกแถว)",
+             "sInfoPostFix": "",
+             "sSearch": "ค้นหา:",
+             "sUrl": "",
+             "oPaginate": {
+                           "sFirst": "เิริ่มต้น",
+                           "sPrevious": "ก่อนหน้า",
+                           "sNext": "ถัดไป",
+                           "sLast": "สุดท้าย"
+             }
+    }
+});
+  $('.dtTable').DataTable();
+});
+
+$('select').selectize();
+  </script>
 </body>
 </html>

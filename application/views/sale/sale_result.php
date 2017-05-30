@@ -50,19 +50,20 @@ top: 0%;">
       <div class="panel-heading">
         <h3 class="panel-title">รายการสินค้า ( Product List )</h3>
       </div>
+      <!-- <pre><?php print_r($sale_order_detail); ?></pre> -->
       <table class="table table-bordered">
         <thead>
           <tr>
             <th width="9%" class="text-center">ลำดับ</th>
             <th colspan="2" width="30%">รายการสินค้า</th>
-            <th width="18%" class="text-right">ราคาสั่งขายต่อหน่วย</th>
+            <th width="18%" class="text-right">ราคาขายต่อหน่วย</th>
             <th width="9%" class="text-right">จำนวน</th>
             <th colspan="2" width="2%" class="text-right">ราคารวม</th>
           </tr>
         </thead>
         <tbody>
           <?php $i=1; foreach ($sale_order_detail as $row): ?>
-            <?php $total[] = @$row['stock_price']?>
+            <?php $total[] = @$row['stock_price']*@$row['stock_amount']?>
             <?php $buy[] = @$row['product_buy']?>
             <?php @$row['product_key'] = date('YmdHis');?>
             <?php if(@$row['product_key']!=""){ ?>
@@ -72,18 +73,20 @@ top: 0%;">
                   <?php echo @$row['product_code']." - ".@$row['product_name']?>
                 </td>
                 <td class="text-right">
-                  <?php echo @$row['stock_price']?>.00
+                  <?php echo number_format($row['stock_price'], 2);?>
                 </td>
-                <td class="text-right">1</td>
+                <td class="text-right">
+                  <?php echo @$row['stock_amount']." ".@$row['product_unit']?>
+                </td>
                 <td class="text-right" colspan="2">
-                  <?php echo @$row['stock_price']?>.00
+                  <?php echo number_format(@$row['stock_price']*@$row['stock_amount'],2);?>
                 </td>
               </tr>
               <?php } ?>
               <?php $i++; endforeach; ?>
               <tr>
                 <td colspan="6" class="text-right"><strong>รวมทั้งหมด</strong></td>
-                <td class="text-right"><?php echo @number_format(@array_sum(@$total))?>.00</td>
+                <td class="text-right"><?php echo @number_format(@array_sum(@$total), 2)?></td>
               </tr>
               <tr>
                 <?php if ($sale_order_detail[0]['sale_order_detail_discount_status']==1): ?>
@@ -95,8 +98,8 @@ top: 0%;">
               <tr>
                 <td colspan="6" class="text-right"><strong>หลังหักส่วนลด</strong></td>
                 <td class="text-right">
-                  <?php  echo @number_format(@array_sum(@$total)-($sale_order_detail[0]['sale_order_detail_discount']*1));
-                  ?>.00</div></td>
+                  <?php  echo @number_format(@array_sum(@$total)-($sale_order_detail[0]['sale_order_detail_discount']*1), 2);
+                  ?></div></td>
                 </tr>
               <?php endif; ?>
 

@@ -8,7 +8,7 @@
     </div>
   </div>
   <!-- /.row -->
-  <table class="table table-bordered table-hover table-striped tablesorter">
+  <table class="dtTable table table-bordered table-hover table-striped tablesorter">
     <thead>
       <tr>
         <th width="5%"><div align="center">ลำดับ</div></th>

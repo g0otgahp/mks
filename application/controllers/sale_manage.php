@@ -129,15 +129,27 @@ class sale_manage extends CI_Controller {
 	}
 	public function sale_insert()
 	{
+
 		@session_start();
 		date_default_timezone_set("Asia/Bangkok");
-		if ($_SESSION['is_vat'] = 'checked') {
-			$vat = '1';
+		if (!isset($_SESSION['is_vat'])) {
+			if ($_SESSION['is_vat'] == 'checked') {
+				$vat = 1;
+			} else {
+				$vat = 0;
+			}
+		} else {
+			$vat = 0;
 		}
-		if ($_SESSION['is_discount'] = 'checked') {
-			$discount = '1';
-			$discount_value = @$_SESSION['discount_value'];
-			if ($discount_value=='') {
+		if (!isset($_SESSION['is_discount'])) {
+			if ($_SESSION['is_discount'] == 'checked') {
+				$discount = '1';
+				$discount_value = @$_SESSION['discount_value'];
+				if ($discount_value=='') {
+					$discount = '0';
+					$discount_value = 0;
+				}
+			} else {
 				$discount = '0';
 				$discount_value = 0;
 			}
@@ -145,6 +157,7 @@ class sale_manage extends CI_Controller {
 			$discount = '0';
 			$discount_value = 0;
 		}
+
 		if (@$_SESSION['pay_type']=='') {
 			@$_SESSION['pay_type'] = 1;
 		}

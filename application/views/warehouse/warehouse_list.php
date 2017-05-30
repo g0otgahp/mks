@@ -7,9 +7,30 @@
       </ol>
     </div>
   </div>
-  <!-- /.row -->
-  <div align="right"><p><?php echo anchor('warehouse/warehouse_in','<button type="button" class="btn btn-primary" style="width:95px;">รับเข้า</button>')?> <?php echo anchor('warehouse/warehouse_out','<button type="button" class="btn btn-info" style="width:95px;">จ่ายออก</button>')?></p></div>
-  <table class="table table-bordered table-hover table-striped tablesorter">
+  <div class="row">
+    <div class="col-md-6">
+      <!-- <div class="col-md-5">
+        <div class="form-group">
+          <input type="text" class="form-control" id="" placeholder="ค้นหาด้วยบาร์โค๊ด">
+        </div>
+      </div>
+      <div class="col-md-5">
+        <div class="form-group">
+          <input type="text" class="form-control" id="" placeholder="ค้นหาด้วยชื่อ">
+        </div>
+      </div>
+      <div class="col-md-2">
+        <button type="button" class="btn btn-info">
+          ค้นหา
+        </button>
+      </div> -->
+    </div>
+    <div class="col-md-6 text-right form-group">
+      <a href="<?php echo site_url(); ?>/warehouse/warehouse_in" class="btn btn-success">รับเข้า</a>
+      <a href="<?php echo site_url(); ?>/warehouse/warehouse_out" class="btn btn-danger">จ่ายออก</a>
+    </div>
+  </div>
+  <table class="dtTable table table-bordered table-hover table-striped tablesorter">
     <thead>
       <tr>
         <th width="5%"><div align="center">ลำดับ</div></th>

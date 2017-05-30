@@ -9,7 +9,7 @@
   </div>
   <!-- /.row -->
   <?php echo form_open('stock/stock_list_shop')?>
-  <table width="90%" border="0" cellspacing="5" cellpadding="5">
+  <table width="90%" border="0" cellspacing="5" cellpadding="5" class="">
     <tr>
       <td width="12%" align="center">เลือกร้านขาย</td>
       <td width="24%"><select name="employees_shop" id="employees_shop" class="form-control" style="width:80%;" required="required" onchange="this.form.submit()">
@@ -24,7 +24,7 @@
   <?php echo form_close()?>
   <p></p>
   <?php if(@$employees_shop!=""){ ?>
-  <table class="table table-bordered table-hover table-striped tablesorter">
+  <table class="dtTable table table-bordered table-hover table-striped tablesorter">
     <thead>
       <tr>
         <th width="5%"><div align="center">ลำดับ</div></th>

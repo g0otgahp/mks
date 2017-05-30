@@ -21,7 +21,7 @@ function getfocus(){
 			<td width="24%"><select name="warehouse_product" id="warehouse_product" class="form-control" style="width:80%;" required>
         <option value="">-- เลือกสินค้า --</option>
         <?php foreach($allproduct as $row){ ?>
-        <option value="<?php echo $row['product_code']?>"><?php echo $row['product_name']?></option>
+        <option value="<?php echo $row['product_code']?>"><?php echo $row['product_code']?> | <?php echo $row['product_name']?></option>
         <?php } ?>
       </select></td>
       <td width="15%">จำนวนนำเข้า</td>
