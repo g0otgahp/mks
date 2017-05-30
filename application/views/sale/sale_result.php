@@ -98,8 +98,12 @@ top: 0%;">
               <tr>
                 <td colspan="6" class="text-right"><strong>หลังหักส่วนลด</strong></td>
                 <td class="text-right">
-                  <?php  echo @number_format(@array_sum(@$total)-($sale_order_detail[0]['sale_order_detail_discount']*1), 2);
-                  ?></div></td>
+                  <?php
+                    $total_after_discount = 0;
+                    $total_after_discount = @array_sum( @$total ) - ( $sale_order_detail[0]['sale_order_detail_discount'] * 1 );
+                    echo @number_format($total_after_discount, 2);
+                  ?>
+                </td>
                 </tr>
               <?php endif; ?>
 
@@ -110,12 +114,9 @@ top: 0%;">
                   </td>
                   <td class="text-right">
                     <?php
-                      if ($sale_order_detail[0]['sale_order_detail_discount_status']==1) {
-                        @$discount_after_vat = (@array_sum(@$total)-(@$sale_order_detail[0]['sale_order_detail_discount']*1))*7/100;
-                        echo @number_format($discount_after_vat).".00";
-                      } else {
-                        echo @number_format(@array_sum(@$total)*7/100).".00";
-                      }
+                    $temp_vat = 0;
+                    $temp_vat = $total_after_discount*7/100;
+                    echo number_format($temp_vat);
                     ?>
                   </td>
                 </tr>
@@ -125,15 +126,22 @@ top: 0%;">
                   <td colspan="6" class="text-right"><strong>ยอดสุทธิ</strong></td>
                   <td bgcolor="#88d660" class="text-right">
                     <strong>
-                    <?php
-                    if ($sale_order_detail[0]['sale_order_detail_discount_status']==1) {
-                      echo @number_format(@array_sum(@$total)-($sale_order_detail[0]['sale_order_detail_discount']));
-                    } else {
-                      echo  @number_format(@array_sum(@$total));
-                    }
-                    ?>.00
-                  </strong>
-                </td>
+                      <?php
+                      $temp_total = 0;
+                      if ($sale_order_detail[0]['sale_order_detail_discount_status'] == 1) {
+                        $temp_total = @array_sum(@$total)-($sale_order_detail[0]['sale_order_detail_discount']);
+                      } else {
+                        $temp_total = @array_sum(@$total);
+                      }
+
+                      if ($sale_order_detail[0]['sale_order_detail_vat_status']==1){
+                        $temp_total = $temp_total + $temp_vat;
+                      }
+
+                      echo  @number_format($temp_total);
+                      ?>.00
+                    </strong>
+                  </td>
                   </tr>
                   </tbody>
                 </table>

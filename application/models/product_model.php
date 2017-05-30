@@ -31,24 +31,26 @@ class product_model extends CI_Model {
 
 	public function report_product_list($input)
 	{
+		// echo "<pre>";
 		$product['sale_order_item'] = $this->product_list();
 
 		$i=0;
 		foreach ($product['sale_order_item'] as $row) {
 			// $this->db->select_sum('stock_amount');
 			// $this->db->select_sum('stock_price');
-			$this->db->where('stock_product',$row['product_code']);
+			$this->db->where('stock_product', $row['product_code']);
 			$this->db->where('stock.stock_type',"out");
 			$this->db->where('stock.stock_date >=',$input['date_start']);
 			$this->db->where('stock.stock_date <=',$input['date_end']);
 			$query = $this->db->get('stock')->result_array();
-
+			
 			$product['sale_order_item'][$i]['sum_stock_amount'] = 0;
 			$product['sale_order_item'][$i]['sum_stock_price'] = 0;
 			$product['sale_order_item'][$i]['sum_stock_discount'] = 0;
 			foreach ($query as $item) {
+				echo $item['stock_price'];
 				$product['sale_order_item'][$i]['sum_stock_amount'] += $item['stock_amount'];
-				$product['sale_order_item'][$i]['sum_stock_price']  += $item['stock_price'];
+				$product['sale_order_item'][$i]['sum_stock_price']  += $item['stock_price']*$item['stock_amount'];
 				if ($product['sale_order_item'][$i]['product_sale']> $item['stock_price']) {
 					$product['sale_order_item'][$i]['sum_stock_discount'] += ($product['sale_order_item'][$i]['product_sale']-$item['stock_price']);
 				}
@@ -82,6 +84,10 @@ class product_model extends CI_Model {
 		$this->db->where('sale_order_detail.sale_order_detail_date <=',$input['date_end']);
 		$this->db->where('sale_order_detail.sale_order_detail_status',1);
 		$product['sale_order_detail'] = $this->db->get('sale_order_detail')->result_array();
+
+
+		// print_r($product);
+		// exit();
 		return $product;
 	}
 
