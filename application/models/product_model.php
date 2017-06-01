@@ -4,12 +4,83 @@ class product_model extends CI_Model {
 
 	public function product_list()
 	{
-		$this->db->order_by('product.product_id','desc');
+		$this->db->order_by('product.product_id','ASC');
 		$this->db->join('category','category.category_id = product.product_category');
-		$query = $this->db->get('product');
-		return $query->result_array();
+		$product = $this->db->get('product')->result_array();
+
+		$product = $this->stock_balance($product);
+		return $product;
+	}
+	public function product_find($value)
+	{
+		$this->db->where('product.product_id', $value);
+		$this->db->or_where('product.product_code', $value);
+		$this->db->join('category','category.category_id = product.product_category');
+		$product = $this->db->get('product')->result_array();
+		if (count($product) > 0) {
+			$product = $product[0];
+		}
+		return $product;
+	}
+	public function product_w_list()
+	{
+		$this->db->order_by('product.product_id','ASC');
+		$this->db->join('category','category.category_id = product.product_category');
+		$product = $this->db->get('product')->result_array();
+
+		$product = $this->warehouse_balance($product);
+		return $product;
 	}
 
+	 public function stock_balance($product)
+	 {
+		 $i = 0;
+		 foreach ($product as $p) {
+			 $stock = $this->db
+			 ->join('product', 'product.product_code = stock.stock_product')
+			 ->where('stock.stock_product', $p['product_code'])
+			 ->get('stock')->result_array();
+			 $stock_balance = 0;
+
+			 foreach ($stock as $s) {
+				 if ($s['stock_type'] == 'in') {
+					 $stock_balance += $s['stock_amount'];
+				 } else {
+					 $stock_balance -= $s['stock_amount'];
+				 }
+			 }
+			 $product[$i]['stock_balance'] = $stock_balance;
+			 $i++;
+
+		 }
+		 return $product;
+	 }
+	 public function warehouse_balance($product)
+	 {
+		//  echo "<pre>";
+		//  print_r($product);
+		//  exit();
+	 	$i = 0;
+	 	foreach ($product as $p) {
+	 		$warehouse = $this->db
+	 		->join('product', 'product.product_code = warehouse.warehouse_product')
+	 		->where('warehouse.warehouse_product', $p['product_code'])
+	 		->get('warehouse')->result_array();
+			//  print_r($warehouse);
+			//  exit();
+	 		$warehouse_balance = 0;
+	 		foreach ($warehouse as $s) {
+	 			if ($s['warehouse_type'] == 'in') {
+	 				$warehouse_balance += $s['warehouse_amount'];
+	 			} else {
+	 				$warehouse_balance -= $s['warehouse_amount'];
+	 			}
+	 		}
+	 		$product[$i]['warehouse_balance'] = $warehouse_balance;
+			$i++;
+	 	}
+	 	return $product;
+	 }
 	public function product_list_by_code($product_code)
 	{
 		$this->db->order_by('product.product_id','desc');
@@ -43,7 +114,7 @@ class product_model extends CI_Model {
 			$this->db->where('stock.stock_date >=',$input['date_start']);
 			$this->db->where('stock.stock_date <=',$input['date_end']);
 			$query = $this->db->get('stock')->result_array();
-			
+
 			$product['sale_order_item'][$i]['sum_stock_amount'] = 0;
 			$product['sale_order_item'][$i]['sum_stock_price'] = 0;
 			$product['sale_order_item'][$i]['sum_stock_discount'] = 0;

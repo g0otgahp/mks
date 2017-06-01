@@ -7,7 +7,7 @@ class warehouse extends CI_Controller {
 		@session_start();
 		$data['config'] = $this->config_model->config();
 		if(@$_SESSION['employees_id']!=""){
-			$data['product'] = $this->product_model->product_list();
+			$data['product'] = $this->product_model->product_w_list();
 			$data['page'] = "warehouse/warehouse_list";
 			$this->load->view('head',$data);
 		}else{
@@ -114,6 +114,7 @@ class warehouse extends CI_Controller {
 	public function warehouse_out()
 	{
 		@session_start();
+
 		$data['config'] = $this->config_model->config();
 		if(@$_SESSION['employees_id']!=""){
 			$data['shop'] = $this->shop_model->shop_list();
